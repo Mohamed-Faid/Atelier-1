@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>convert Binary</title>
+</head>
+<body>
+    <label for="bin">Dicimal Numbre:</label>
+    <input type="text" id="dic">
+    <br>
+    <label for="dic">Binary Numbre: </label>
+    <input type="text" id="bin">
+    <br>
+    <button onclick="conbin()">Convert to Binary</button>
+    <button onclick="condic()">Convert to Dicimal</button>
+    <script>
+        function conbin(){
+            let dic;
+            let res = "";
+            dic = document.getElementById("dic").value;
+            while(dic != 0){
+                var tmp;
+                tmp = dic%2;
+                res = tmp + res;
+                dic= Math.floor(dic/2);
+            }
+            document.getElementById("bin").value = res;
+        }
+        function condic(){
+            let bin;
+            let res = 0;
+            bin = document.getElementById("bin").value;
+            let n = bin.length;
+            for(let i=0;i<n;i++){
+                var tmp = 0;
+                tmp = parseInt(bin[i]);
+                console.log(tmp);
+                res += tmp*(2**(n-1-i));
+            }
+            document.getElementById("dic").value = res;
+        }
+    </script>
+</body>
+</html>

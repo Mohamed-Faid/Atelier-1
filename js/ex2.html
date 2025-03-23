@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul du PGCD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .resultat {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Calcul du Plus Grand Commun Diviseur (PGCD)</h2>
+    <button onclick="calculerPGCD()">Calculer le PGCD</button>
+    <div id="resultat" class="resultat"></div>
+
+    <script>
+        function calculerPGCD() {
+            // Saisie des deux entiers
+            const nombre1 = prompt("Entrez le premier entier:");
+            if (nombre1 === null || isNaN(nombre1) || nombre1 === "" || parseInt(nombre1) <= 0) {
+                alert("Veuillez entrer un entier positif valide.");
+                return;
+            }
+            
+            const nombre2 = prompt("Entrez le deuxième entier:");
+            if (nombre2 === null || isNaN(nombre2) || nombre2 === "" || parseInt(nombre2) <= 0) {
+                alert("Veuillez entrer un entier positif valide.");
+                return;
+            }
+            
+            // Conversion en entiers
+            let a = parseInt(nombre1);
+            let b = parseInt(nombre2);
+            
+            // Algorithme d'Euclide pour calculer le PGCD
+            function pgcd(a, b) {
+                if (b === 0) {
+                    return a;
+                } else {
+                    return pgcd(b, a % b);
+                }
+            }
+            
+            // Calcul du PGCD
+            const resultat = pgcd(a, b);
+            
+            // Affichage du résultat
+            document.getElementById("resultat").innerHTML = 
+                `<p>Le PGCD de ${a} et ${b} est : <strong>${resultat}</strong></p>`;
+        }
+    </script>
+</body>
+</html>

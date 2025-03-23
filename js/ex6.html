@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice</title>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+    <style>
+        body{
+            margin:0px;
+            padding: 0px;
+            background-color: #dddddd;
+        }
+        .container{
+            margin:15px auto;
+            width: 356px;
+            text-align: center;
+            background-color: black;
+            border: solid 1px white;
+            color: white;
+            border-radius: 15px;
+            padding: 10px;
+            font-size: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .screen{
+            width: 328px;
+            padding: 0px 10px;
+            color: black;
+            text-align: right;
+            font-weight: 600;
+            line-height: 50px;
+            font-family: 'Orbitron', sans-serif;
+            margin: 10px auto 15px;
+            border: solid 1px white;
+            background-color: rgb(156, 186, 95);
+            border-radius: 5px;
+        }
+        .btn{
+            margin: 2px;
+            display: inline-block;
+            line-height: 2em;
+            width: 60px;
+            border-radius: 5px;
+            border: solid 1px white;
+            background-color: darkslategrey;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="screen" id="screen">0</div>
+        <div class="btn" onclick="fact()">x!</div>
+        <div class="btn op" data-value="^">^</div>
+        <div class="btn" onclick="sqrt()">sqrt</div>
+        <div class="btn" onclick="clean()">C</div>
+        <div class="btn" onclick="rem()">CE</div>
+        <div class="btn" onclick="cos()">Cos</div>
+        <div class="btn clickable" data-value="7">7</div>
+        <div class="btn clickable" data-value="8">8</div>
+        <div class="btn clickable" data-value="9">9</div>
+        <div class="btn op" data-value="/">/</div>
+        <div class="btn" onclick="sin()">Sin</div>
+        <div class="btn clickable" data-value="4">4</div>
+        <div class="btn clickable" data-value="5">5</div>
+        <div class="btn clickable" data-value="6">6</div>
+        <div class="btn op" data-value="X">X</div>
+        <div class="btn" onclick="tan()">Tan</div>
+        <div class="btn clickable" data-value="1">1</div>
+        <div class="btn clickable" data-value="2">2</div>
+        <div class="btn clickable" data-value="3">3</div>
+        <div class="btn op" data-value="-">-</div>
+        <div class="btn" onclick="perc()">%</div>
+        <div class="btn clickable" data-value="0">0</div>
+        <div class="btn clickable" data-value=".">.</div>
+        <div class="btn" onclick="show()">=</div>
+        <div class="btn op" data-value="+">+</div>
+    </div>
+    <script>
+        let res = 0;
+        let op;
+        function clean(){
+            let sc = document.getElementById("screen");
+            res = 0;
+            op = null;
+            sc.innerText = res;
+        }
+        function rem(){
+            let sc = document.getElementById("screen");
+            let val = sc.innerText;
+            if(val.length>1){
+                sc.innerText = val.slice(0,val.length-1);
+            }else{
+                sc.innerText = "0";
+            }
+        }
+        document.querySelectorAll(".clickable").forEach(div => {
+            div.addEventListener("click", function() {
+                let value = this.getAttribute("data-value");
+                let sc = document.getElementById("screen");
+                let val = sc.innerText;
+                if(val === "0"){
+                    sc.innerText = value;
+                }else{
+                    sc.innerText += value;
+                }
+            });
+        });
+        function calc(){
+            let sc = document.getElementById("screen").innerText;
+            let b = Number(sc);
+            switch(op) {
+                    case "+":
+                        res += b;
+                        break;
+                    case "-":
+                        res -= b;
+                        break;
+                    case "X":
+                        res *= b;
+                        break;
+                    case "/":
+                        if(b !== 0){
+                            res /= b;
+                        }else{
+                            window.alert("you can't divide on zero!");
+                        }
+                        break;
+                    case "^":
+                        res **= b;
+                        break;
+                    default:
+                        res = b;              
+                }
+        }
+        document.querySelectorAll(".op").forEach(div => {
+            div.addEventListener("click", function() {
+                let value = this.getAttribute("data-value");
+                let sc = document.getElementById("screen");
+                calc();
+                sc.innerHTML = "0";
+                op = value;
+            });
+        });
+        function show(){
+            if(op){
+                calc();
+                op = null;
+                let sc = document.getElementById("screen");
+                sc.innerText = res;
+            }else{
+                window.alert("You should choose an operation!");
+            }
+        }
+        function fact(){
+            let sc = document.getElementById("screen");
+            let val = parseInt(sc.innerText);
+            let res = 1;
+            for(let i=2;i<=val;i++){
+                res *= i;
+            }
+            sc.innerText = res;
+        }
+        function sqrt(){
+            let sc = document.getElementById("screen");
+            let val = Number(sc.innerText);
+            sc.innerText = Math.sqrt(val);
+        }
+        function cos(){
+            let sc = document.getElementById("screen");
+            let val = Number(sc.innerText);
+            sc.innerText = Math.cos(val);
+        }
+        function sin(){
+            let sc = document.getElementById("screen");
+            let val = Number(sc.innerText);
+            sc.innerText = Math.sin(val);
+        }
+        function tan(){
+            let sc = document.getElementById("screen");
+            let val = Number(sc.innerText);
+            sc.innerText = Math.tan(val);
+        }
+        function perc(){
+            let sc = document.getElementById("screen");
+            let val = Number(sc.innerText);
+            sc.innerText = val/100;
+        }
+    </script>
+</body>
+</html>

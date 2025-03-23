@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opérations sur les Matrices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .matrice {
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            min-width: 50px;
+        }
+        .controles {
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        .operation-btn {
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .operation-btn:hover {
+            background-color: #45a049;
+        }
+        .resultat {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Opérations sur les Matrices</h2>
+        
+        <div class="controles">
+            <label for="taille">Taille des matrices (n×n):</label>
+            <input type="number" id="taille" min="1" max="10" value="3">
+            <button onclick="creerMatrices()">Créer les matrices</button>
+        </div>
+        
+        <div id="matrices" style="display: none;">
+            <h3>Matrice A</h3>
+            <div id="matriceA" class="matrice"></div>
+            
+            <h3>Matrice B</h3>
+            <div id="matriceB" class="matrice"></div>
+            
+            <div>
+                <button class="operation-btn" onclick="additionner()">Addition (A+B)</button>
+                <button class="operation-btn" onclick="soustraire()">Soustraction (A-B)</button>
+                <button class="operation-btn" onclick="multiplier()">Multiplication (A×B)</button>
+                <button class="operation-btn" onclick="transposer('A')">Transposée de A</button>
+                <button class="operation-btn" onclick="transposer('B')">Transposée de B</button>
+            </div>
+        </div>
+        
+        <div id="resultat" class="resultat" style="display: none;"></div>
+    </div>
+
+    <script>
+        let taille = 3;
+        
+        // Fonction pour créer les matrices A et B
+        function creerMatrices() {
+            taille = parseInt(document.getElementById("taille").value);
+            if (taille < 1 || taille > 10) {
+                alert("La taille doit être entre 1 et 10");
+                return;
+            }
+            
+            // Création de la matrice A
+            let matriceAHTML = `<table>`;
+            for (let i = 0; i < taille; i++) {
+                matriceAHTML += `<tr>`;
+                for (let j = 0; j < taille; j++) {
+                    matriceAHTML += `<td><input type="number" id="A_${i}_${j}" value="0" style="width: 50px;"></td>`;
+                }
+                matriceAHTML += `</tr>`;
+            }
+            matriceAHTML += `</table>`;
+            
+            // Création de la matrice B
+            let matriceBHTML = `<table>`;
+            for (let i = 0; i < taille; i++) {
+                matriceBHTML += `<tr>`;
+                for (let j = 0; j < taille; j++) {
+                    matriceBHTML += `<td><input type="number" id="B_${i}_${j}" value="0" style="width: 50px;"></td>`;
+                }
+                matriceBHTML += `</tr>`;
+            }
+            matriceBHTML += `</table>`;
+            
+            // Affichage des matrices
+            document.getElementById("matriceA").innerHTML = matriceAHTML;
+            document.getElementById("matriceB").innerHTML = matriceBHTML;
+            document.getElementById("matrices").style.display = "block";
+            document.getElementById("resultat").style.display = "none";
+        }
+        
+        // Fonction pour obtenir les valeurs d'une matrice
+        function obtenirMatrice(nom) {
+            const matrice = [];
+            for (let i = 0; i < taille; i++) {
+                const ligne = [];
+                for (let j = 0; j < taille; j++) {
+                    ligne.push(parseFloat(document.getElementById(`${nom}_${i}_${j}`).value) || 0);
+                }
+                matrice.push(ligne);
+            }
+            return matrice;
+        }
+        
+        // Fonction pour afficher une matrice résultat
+        function afficherResultat(matrice, titre) {
+            let resultatHTML = `<h3>${titre}</h3><table>`;
+            for (let i = 0; i < matrice.length; i++) {
+                resultatHTML += `<tr>`;
+                for (let j = 0; j < matrice[i].length; j++) {
+                    resultatHTML += `<td>${matrice[i][j]}</td>`;
+                }
+                resultatHTML += `</tr>`;
+            }
+            resultatHTML += `</table>`;
+            
+            document.getElementById("resultat").innerHTML = resultatHTML;
+            document.getElementById("resultat").style.display = "block";
+        }
+        
+        // Fonction pour additionner les matrices
+        function additionner() {
+            const A = obtenirMatrice("A");
+            const B = obtenirMatrice("B");
+            
+            const resultat = [];
+            for (let i = 0; i < taille; i++) {
+                const ligne = [];
+                for (let j = 0; j < taille; j++) {
+                    ligne.push(A[i][j] + B[i][j]);
+                }
+                resultat.push(ligne);
+            }
+            
+            afficherResultat(resultat, "Résultat de A + B");
+        }
+        
+        // Fonction pour soustraire les matrices
+        function soustraire() {
+            const A = obtenirMatrice("A");
+            const B = obtenirMatrice("B");
+            
+            const resultat = [];
+            for (let i = 0; i < taille; i++) {
+                const ligne = [];
+                for (let j = 0; j < taille; j++) {
+                    ligne.push(A[i][j] - B[i][j]);
+                }
+                resultat.push(ligne);
+            }
+            
+            afficherResultat(resultat, "Résultat de A - B");
+        }
+        
+        // Fonction pour multiplier les matrices
+        function multiplier() {
+            const A = obtenirMatrice("A");
+            const B = obtenirMatrice("B");
+            
+            const resultat = [];
+            for (let i = 0; i < taille; i++) {
+                const ligne = [];
+                for (let j = 0; j < taille; j++) {
+                    let somme = 0;
+                    for (let k = 0; k < taille; k++) {
+                        somme += A[i][k] * B[k][j];
+                    }
+                    ligne.push(somme);
+                }
+                resultat.push(ligne);
+            }
+            
+            afficherResultat(resultat, "Résultat de A × B");
+        }
+        
+        // Fonction pour calculer la transposée d'une matrice
+        function transposer(nom) {
+            const matrice = obtenirMatrice(nom);
+            
+            const resultat = [];
+            for (let i = 0; i < taille; i++) {
+                const ligne = [];
+                for (let j = 0; j < taille; j++) {
+                    ligne.push(matrice[j][i]);
+                }
+                resultat.push(ligne);
+            }
+            
+            afficherResultat(resultat, `Transposée de la matrice ${nom}`);
+        }
+    </script>
+</body>
+</html>
